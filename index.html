@@ -32,8 +32,8 @@
         </details>
         <h1>Quemador de calorías</h1>
         <p class="result" id="result"></p>
-        <button id="burn" class="burn">🔥</button>
-        <button id="Rest" class="Rest">🌠</button>
+          <button id="burn" class="burn">🔥</button>
+          <button id="Rest" class="Rest">🌠</button>
         <p class="clicks" id="clicks"></p>
       </div>
     </main>
@@ -60,25 +60,25 @@
       const reducer = (state, action) => {
         switch (action.type) {
           case 'BURN':
-            return state + 1.42
-          case 'REST':
-            return state - 1
+          state.burn += action.payload
+          state.click > 0 ? state.click -= 1 : state.click = 0
+          return state 
           default:
             return state
         }
       }
-      //Clicks 1360563
-      const store = createStore(reducer, 0)
-      const storeRes = createStore(reducer, 1360563)
+      const initialState = {
+        burn: 0,
+        click: 1360563
+      }
+       const store = createStore(reducer, initialState)
       //store.dispatch()
       //store.getState()
       //store.subscribe()
 
       store.subscribe(() => {
-        window.result.textContent = `Haz quemado ${store.getState().toFixed(3)} calorías`
-      })
-      storeRes.subscribe(() => {
-        window.clicks.textContent = `Te faltan ${storeRes.getState()} clicks`
+        window.result.textContent = `Haz quemado ${store.getState().burn.toFixed(3)} calorías`
+        window.clicks.textContent = `Te faltan ${store.getState().click} clicks  para quemar 1932kCalorias`
       })
 
       const burn = () => {
@@ -88,15 +88,8 @@
         })
       }
 
-      const Rest = () => {
-        storeRes.dispatch({
-          type: 'REST',
-          payload: 1,
-        })
-      }
-
       window.burn.addEventListener('click', burn)
-      window.Rest.addEventListener('click', Rest)
+      window.Rest.addEventListener('click', burn)
     </script>
   </body>
 </html>
